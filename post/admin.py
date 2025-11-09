@@ -8,6 +8,7 @@ class Post_PostTagInline(admin.TabularInline):
     model = Post_PostTag
     extra = 1
     autocomplete_fields = ("tag",)
+    verbose_name = "Tag"
 
 
 @admin.register(Post)
