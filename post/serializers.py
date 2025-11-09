@@ -1,0 +1,19 @@
+from rest_framework import serializers
+
+from post.models import Post
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            "id",
+            "title_en",
+            "title_zh",
+            "content_en",
+            "content_zh",
+            "media_en",
+            "media_zh",
+            "created_at",
+            "updated_at",
+        )
