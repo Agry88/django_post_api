@@ -1,6 +1,6 @@
 # Create your views here.
-from drf_yasg.utils import swagger_auto_schema
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
+from drf_yasg.utils import status, swagger_auto_schema
+from rest_framework.views import Response
 from rest_framework.viewsets import GenericViewSet
 
 from post.models import Post
@@ -8,7 +8,7 @@ from post.serializers import PostSerializer
 
 
 # Create your views here.
-class PostViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
+class PostViewSet(GenericViewSet):
     """
     ViewSet for managing Post objects.
 
@@ -28,7 +28,9 @@ class PostViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         },
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_summary="Retrieve a post",
@@ -39,4 +41,6 @@ class PostViewSet(ListModelMixin, RetrieveModelMixin, GenericViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
