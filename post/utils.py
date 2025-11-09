@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.html import format_html
 
 
 def localized_field(base_name, field_class=models.CharField, **kwargs):
@@ -21,3 +22,13 @@ def localized_field(base_name, field_class=models.CharField, **kwargs):
         field_name = f"{base_name}_{lang_code}"
         fields[field_name] = field_class(**kwargs)
     return fields
+
+
+def set_image_tag(media_field: str) -> str:
+    """Helper method to generate image tag HTML for a given media field."""
+    if media_field:
+        return format_html(
+            '<img src="{}" style="width: 100%;" />',
+            media_field.url,
+        )
+    return "No image"

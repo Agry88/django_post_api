@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.base import ModelBase
-from .utils import localized_field
+from .utils import localized_field, set_image_tag
 
 
 # Create your models here.
@@ -41,3 +41,9 @@ class Post(models.Model, metaclass=LocalizedModelBase):
         return (
             getattr(self, "title_en", "") or getattr(self, "title_zh", "") or "Untitled"
         )
+
+    def image_tag_en(self):
+        return set_image_tag(self.media_en)
+
+    def image_tag_zh(self):
+        return set_image_tag(self.media_zh)

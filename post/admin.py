@@ -10,11 +10,11 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ("title_en", "title_zh", "content_en", "content_zh")
 
     fieldsets = (
-        ("English", {"fields": ("title_en", "content_en", "media_en")}),
-        ("Chinese", {"fields": ("title_zh", "content_zh", "media_zh")}),
+        ("English", {"fields": ("title_en", "content_en", "media_en", "image_tag_en")}),
+        ("Chinese", {"fields": ("title_zh", "content_zh", "media_zh", "image_tag_zh")}),
         (
             "Metadata",
             {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
         ),
     )
-    readonly_fields = ("created_at", "updated_at")
+    readonly_fields = ("created_at", "updated_at", "image_tag_en", "image_tag_zh")
