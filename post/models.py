@@ -1,23 +1,5 @@
 from django.db import models
-from django.db.models.base import ModelBase
-from .utils import localized_field, set_image_tag
-
-
-# Create your models here.
-class LocalizedModelBase(ModelBase):
-    """Metaclass to add localized fields to models during class creation.
-
-    This processes the 'localized_fields' attribute which should be a list of tuples:
-    (base_name, field_class, field_kwargs_dict)
-    """
-
-    def __new__(cls, name, bases, attrs, **kwargs):
-        # Process localized_fields if present
-        if "localized_fields" in attrs:
-            field_configs = attrs.pop("localized_fields")
-            for base_name, field_class, field_kwargs in field_configs:
-                attrs.update(localized_field(base_name, field_class, **field_kwargs))
-        return super().__new__(cls, name, bases, attrs, **kwargs)
+from .utils import localized_field, set_image_tag, LocalizedModelBase
 
 
 class Post(models.Model, metaclass=LocalizedModelBase):
