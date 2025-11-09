@@ -1,5 +1,5 @@
 from django.db import models
-from .utils import localized_field, set_image_tag, LocalizedModelBase
+from .utils import set_image_tag, LocalizedModelBase
 
 
 class Post(models.Model, metaclass=LocalizedModelBase):
