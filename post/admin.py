@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Post
+
+from .models import Post, PostTag
 
 
 # Register your models here.
@@ -14,7 +15,16 @@ class PostAdmin(admin.ModelAdmin):
         ("Chinese", {"fields": ("title_zh", "content_zh", "media_zh", "image_tag_zh")}),
         (
             "Metadata",
-            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
+            {
+                "fields": ("created_at", "updated_at"),
+                "classes": ("collapse",),
+            },
         ),
     )
     readonly_fields = ("created_at", "updated_at", "image_tag_en", "image_tag_zh")
+
+
+@admin.register(PostTag)
+class PostTagAdmin(admin.ModelAdmin):
+    list_display = ("name_en", "name_zh", "slug_en", "slug_zh")
+    search_fields = ("name_en", "name_zh", "slug_en", "slug_zh")

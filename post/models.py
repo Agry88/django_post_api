@@ -1,5 +1,18 @@
 from django.db import models
-from .utils import set_image_tag, LocalizedModelBase
+
+from .utils import LocalizedModelBase, set_image_tag
+
+
+class PostTag(models.Model, metaclass=LocalizedModelBase):
+    localized_fields = [
+        ("name", models.CharField, {"max_length": 200}),
+        ("slug", models.SlugField, {"unique": True}),
+    ]
+
+    def __str__(self):
+        return (
+            getattr(self, "name_en", "") or getattr(self, "name_zh", "") or "Untitled"
+        )
 
 
 class Post(models.Model, metaclass=LocalizedModelBase):
@@ -15,6 +28,10 @@ class Post(models.Model, metaclass=LocalizedModelBase):
         ),
     ]
 
+    tags = models.ManyToManyField(
+        PostTag, through="Post_PostTag", through_fields=("post", "tag")
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -29,3 +46,13 @@ class Post(models.Model, metaclass=LocalizedModelBase):
 
     def image_tag_zh(self):
         return set_image_tag(self.media_zh)
+
+    def get_post_tags(self):
+        return ", ".join([tag.name_en for tag in self.tags.all()])
+
+
+class Post_PostTag(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    tag = models.ForeignKey(PostTag, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
