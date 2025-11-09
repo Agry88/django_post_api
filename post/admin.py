@@ -6,9 +6,16 @@ from .models import Post, Post_PostTag, PostTag
 # Register your models here.
 class Post_PostTagInline(admin.TabularInline):
     model = Post_PostTag
-    extra = 1
+    extra = 0
     autocomplete_fields = ("tag",)
     verbose_name = "Tag"
+
+
+class PostTag_PostInline(admin.TabularInline):
+    model = Post_PostTag
+    extra = 0
+    autocomplete_fields = ("post",)
+    verbose_name_plural = "Posts"
 
 
 @admin.register(Post)
@@ -41,3 +48,4 @@ class PostAdmin(admin.ModelAdmin):
 class PostTagAdmin(admin.ModelAdmin):
     list_display = ("name_en", "name_zh", "slug_en", "slug_zh")
     search_fields = ("name_en", "name_zh", "slug_en", "slug_zh")
+    inlines = [PostTag_PostInline]
