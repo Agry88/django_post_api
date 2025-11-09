@@ -28,7 +28,7 @@ class Post(models.Model, metaclass=LocalizedModelBase):
         ("content", models.TextField, {}),
         (
             "media",
-            models.FileField,
+            models.ImageField,
             {"upload_to": "media/", "null": True, "blank": True},
         ),
     ]
