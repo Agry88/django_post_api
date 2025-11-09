@@ -47,9 +47,6 @@ class Post(models.Model, metaclass=LocalizedModelBase):
     def image_tag_zh(self):
         return set_image_tag(self.media_zh)
 
-    def get_post_tags(self):
-        return ", ".join([tag.name_en for tag in self.tags.all()])
-
 
 class Post_PostTag(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
