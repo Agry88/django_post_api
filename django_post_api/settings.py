@@ -11,21 +11,35 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def get_required_env(key: str) -> str:
+    """Get required environment variable, raise error if not set."""
+    value = os.getenv(key)
+    if value is None:
+        raise ValueError(f"Required environment variable '{key}' is not set")
+    return value
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4tsz6jxv$qalb!batmcq%365u9l121@z!n99_wy)=siwl6giw('
+SECRET_KEY = get_required_env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_required_env('DEBUG').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+allowed_hosts = get_required_env('ALLOWED_HOSTS')
+ALLOWED_HOSTS = allowed_hosts.split(',') if allowed_hosts else []
 
 
 # Application definition
@@ -75,8 +89,12 @@ WSGI_APPLICATION = 'django_post_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': get_required_env('POSTGRES_DB'),
+        'USER': get_required_env('POSTGRES_USER'),
+        'PASSWORD': get_required_env('POSTGRES_PASSWORD'),
+        'HOST': get_required_env('POSTGRES_HOST'),
+        'PORT': get_required_env('POSTGRES_PORT'),
     }
 }
 
