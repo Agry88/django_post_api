@@ -43,6 +43,9 @@ allowed_hosts = get_required_env("ALLOWED_HOSTS")
 ALLOWED_HOSTS = allowed_hosts.split(",") if allowed_hosts else []
 
 
+csrf_trusted_origins = get_required_env("CSRF_TRUSTED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = csrf_trusted_origins.split(",") if csrf_trusted_origins else []
+
 # Application definition
 
 INSTALLED_APPS = [
